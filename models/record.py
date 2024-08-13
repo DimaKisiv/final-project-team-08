@@ -4,20 +4,15 @@ class Record:
         #fields for:
         #id, name, address, phone numbers, email, birthday
 
-        def add_phone():
-            pass
-
-        def remove_phone(phone):
-            pass
-
-        def set_address(address):
-            pass
-
-        def set_email(email):
-            pass
-
-        def set_birthday(birthday):
-            pass
-        
-
-    
+    def add_phone(self, phone):
+        pass
+    def remove_phone(self, phone):
+        pass
+    def set_address(self, address):
+        pass
+    def set_email(self, email):
+        pass
+    def set_birthday(self, birthday):
+        pass
+    def find_phone(self, phone):
+        pass
