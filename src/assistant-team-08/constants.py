@@ -1,7 +1,7 @@
 #fields with all available commands to keep them all in one place
 
 class Messages:
-    Wellcome = "Welcome to the assistant bot!"
+    Welcome = "Welcome to the assistant bot!"
     EnterACommand = "Enter a command: "
     HowCanIHelpYou = "How can I help you?"
     InvalidCommand = "Invalid command."

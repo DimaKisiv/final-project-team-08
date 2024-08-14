@@ -102,7 +102,6 @@ def update_email(args):
         _repository.update_record(name, record)
     return Messages.ContactUpdated
 
-
 @register_command('list')
 def list_contacts(args):
     """
@@ -111,3 +110,16 @@ def list_contacts(args):
     contacts_string = "\n".join([str(record) for record in _repository.get_all()])
     return contacts_string
 
+@register_command('delete')
+@input_error
+def delete_contact(args):
+    """
+    The command to delete a contact by name
+    """
+    name, *_ = args
+    record = _repository.find_by_name(name)
+    if record is None:
+        return Messages.ContactDoesNotExist
+
+    _repository.delete_record(name)
+    return Messages.ContactDeleted
