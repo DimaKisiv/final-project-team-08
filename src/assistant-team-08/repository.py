@@ -36,10 +36,9 @@ class Repository(UserDict):
         self.__saver.save(self.data)
 
     def delete_record(self, name):
-          del self.data[name.lower()]
+          del self.data[name]
 
     def find_by_name(self, name):
-        name_lower = name.lower()
-        return self.data.get(name_lower)
+        return self.data.get(name)
 
 
