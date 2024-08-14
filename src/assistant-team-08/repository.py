@@ -1,6 +1,6 @@
 # class for saving and updating records in file
 import pickle
-from constants import Paths
+from constants import Paths, Messages
 from collections import UserDict
 
 class Saver:
@@ -36,11 +36,14 @@ class Repository(UserDict):
         self.data[name] = record
         self.__saver.save(self.data)
 
-
-    def delete_record(self):
-        pass
+    def delete_record(self, name):
+          del self.records[name.lower()]
 
     def find_by_name(self, name):
-        return self.data.get(name)
+        name_lower = name.lower()
+        for record in self.records:
+            if record.name.lower() == name_lower:
+                return record
+        return Messages.ContactDoesNotExist
 
 
