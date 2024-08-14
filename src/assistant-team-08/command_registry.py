@@ -44,6 +44,11 @@ def create_command_executor():
     return run_command
 
 
+def get_commands():
+    """returns the list of the existing commands"""
+    return list(_command_registry.keys())
+
+
 def register_command(name):
     """
     Decorator to register a command function.
@@ -107,7 +112,8 @@ def list_contacts(args):
     """
     Command to list all contacts.
     """
-    contacts_string = "\n".join([str(record) for record in _repository.get_all()])
+    contacts_string = "\n".join([str(record)
+                                for record in _repository.get_all()])
     return contacts_string
 
 @register_command('delete')
