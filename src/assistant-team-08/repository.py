@@ -1,7 +1,6 @@
 # class for saving and updating records in file
 
-from models.record import Record
-from repository.saver import Saver
+from models import Record
 
 
 class Repository():
@@ -25,3 +24,18 @@ class Repository():
     def find_by_name(self, name):
         pass
         # filter by name Cache.records
+
+
+class Saver:
+
+    def __init__(self):
+        self.__file_name = Paths.database_file
+
+
+    def save(records):
+        pass
+        #save records to file
+
+    def load(records):
+        pass
+        #load records from file

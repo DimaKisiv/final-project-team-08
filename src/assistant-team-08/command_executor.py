@@ -1,7 +1,7 @@
 #class for handlingn all commands
 from constants.commands import Commands
-from repository.saver import Saver
-from repository.repository import Repository
+from repository import Saver
+from repository import Repository
 
 class CommandExecutionService():
     def __init__(self):
