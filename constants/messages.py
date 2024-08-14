@@ -20,3 +20,6 @@ class Messages:
     ContactDeleted ="Contact deleted."
     BirthdayAdded ="Birthday added."
     GoodBye = "Good bye!"
+    PhoneNotValid = "Invalid phone number format"
+    EmailNotValid = "Invalid email format"
+    BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
