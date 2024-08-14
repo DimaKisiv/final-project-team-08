@@ -9,11 +9,11 @@ Modules:
 Usage:
 - Run the script and follow the prompts to execute commands.
 """
+from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import WordCompleter
 from constants import Messages
 from parser import parse_input
 import command_registry as command_service
-from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter
 
 
 def main():
