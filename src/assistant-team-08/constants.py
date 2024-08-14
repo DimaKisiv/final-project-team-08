@@ -14,7 +14,7 @@ class Messages:
     GiveNameWithOldAndNewPhones = "Give me name with old and new phones please."
     ContactAlreadyExists = "Contact already exists"
     ContactDoesNotExist = "Contact does not exist" 
-    ContactChanged = "Contact changed."
+    ContactUpdated = "Contact updated."
     ContactAdded = "Contact added."
     PhoneAdded = "Phone added."
     PhoneAlreadyExists = "Phone already exists."
