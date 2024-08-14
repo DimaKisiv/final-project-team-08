@@ -15,9 +15,8 @@ class Saver:
         try:
             with open(self.__file_name, "rb") as f:
                 return pickle.load(f)
-        except: 
+        except:
             return {}
-        
 
 class Repository(UserDict):
     def __init__(self, saver: Saver):
@@ -37,13 +36,10 @@ class Repository(UserDict):
         self.__saver.save(self.data)
 
     def delete_record(self, name):
-          del self.records[name.lower()]
+          del self.data[name.lower()]
 
     def find_by_name(self, name):
         name_lower = name.lower()
-        for record in self.records:
-            if record.name.lower() == name_lower:
-                return record
-        return Messages.ContactDoesNotExist
+        return self.data.get(name_lower)
 
 
