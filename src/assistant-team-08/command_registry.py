@@ -23,6 +23,7 @@ Example:
 """
 from models import Record
 from constants import Messages
+from repository import Repository, Saver
 
 command_registry = {}
 
@@ -86,3 +87,20 @@ def list_contacts(storage):
     Command to list all contacts.
     """
     print("Listing all contacts")
+
+@register_command('delete')
+@input_error
+def delete_contact(args, storage):
+    """
+    The command to delete a contact by name
+    """
+    name, *_ = args
+    name_lower = name.lower()
+    record = Repository.find_by_name(name_lower)
+    if record is None:
+        return Messages.ContactDoesNotExist
+
+    Repository.delete_record(record)
+    Saver.save(storage)
+    return Messages.ContactDeleted
+
