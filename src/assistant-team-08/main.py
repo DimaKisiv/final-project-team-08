@@ -1,6 +1,6 @@
-from constants.messages import Messages
-from helpers.parser import parse_input
-import services.command_registry as command_service
+from constants import Messages
+from parser import parse_input
+import command_registry as command_service
 
 
 def main():

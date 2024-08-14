@@ -1,4 +1,5 @@
-#fields with texts for user to keep them all in one place
+#fields with all available commands to keep them all in one place
+
 class Messages:
     Wellcome = "Welcome to the assistant bot!"
     EnterACommand = "Enter a command: "
@@ -23,3 +24,7 @@ class Messages:
     PhoneNotValid = "Invalid phone number format"
     EmailNotValid = "Invalid email format"
     BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
+
+class Paths:
+    database_file = "repository/data.txt"
+

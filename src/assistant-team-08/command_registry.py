@@ -21,8 +21,8 @@ Example:
     command_executor("add", "John", "+38098442123")
     command_executor("list")
 """
-from models.record import Record
-from constants.messages import Messages
+from models import Record
+from constants import Messages
 
 command_registry = {}
 

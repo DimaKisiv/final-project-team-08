@@ -1,5 +1,5 @@
 import re
-from constants.messages import Messages
+from constants import Messages
 
 class Validation:
   PhonePattern = r"^\+?38[ _-]?\(?\d{3}\)?[ _-]?\d{3}[ _-]?\d{2}[ _-]?\d{2}$"

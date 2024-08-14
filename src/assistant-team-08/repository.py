@@ -1,7 +1,7 @@
 # class for saving and updating records in file
 
 from models import Record
-
+from constants import Paths
 
 class Repository():
     records = list(Record)
