@@ -1,8 +1,3 @@
-#fields with all available commands to keep them all in one place
-
-class Commands:
-    pass
-
 #fields with texts for user to keep them all in one place
 class Messages:
     Wellcome = "Welcome to the assistant bot!"
@@ -17,15 +12,14 @@ class Messages:
     GiveNameAndPhone = "Give me name and phone please."
     GiveNameWithOldAndNewPhones = "Give me name with old and new phones please."
     ContactAlreadyExists = "Contact already exists"
-    ContactDoesNotExist = "Contact does not exist"
+    ContactDoesNotExist = "Contact does not exist" 
     ContactChanged = "Contact changed."
     ContactAdded = "Contact added."
-    ContactUpdated = "Contact updated"
     PhoneAdded = "Phone added."
     PhoneAlreadyExists = "Phone already exists."
     ContactDeleted ="Contact deleted."
     BirthdayAdded ="Birthday added."
     GoodBye = "Good bye!"
-
-class Paths:
-    database_file = "repository/data.txt"
+    PhoneNotValid = "Invalid phone number format"
+    EmailNotValid = "Invalid email format"
+    BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
