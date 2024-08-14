@@ -20,6 +20,7 @@ class Messages:
     ContactDoesNotExist = "Contact does not exist"
     ContactChanged = "Contact changed."
     ContactAdded = "Contact added."
+    ContactUpdated = "Contact updated"
     PhoneAdded = "Phone added."
     PhoneAlreadyExists = "Phone already exists."
     ContactDeleted ="Contact deleted."
