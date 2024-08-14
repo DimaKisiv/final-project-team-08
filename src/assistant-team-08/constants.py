@@ -26,5 +26,5 @@ class Messages:
     BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
 
 class Paths:
-    database_file = "repository/data.txt"
+    database_file = "data.pkl"
 

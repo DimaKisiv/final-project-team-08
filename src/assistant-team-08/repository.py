@@ -1,41 +1,46 @@
 # class for saving and updating records in file
-
-from models import Record
+import pickle
 from constants import Paths
-
-class Repository():
-    records = list(Record)
-
-    def __init__(self):
-        self.__saver = Saver()
-
-    def add_record(self, record):
-        self.__saver.save(record)
-        pass
-
-    def update_record(self, record):
-        #remove record from records in database
-        #save
-        pass
-
-    def delete_record(self, id):
-        pass
-    
-    def find_by_name(self, name):
-        pass
-        # filter by name Cache.records
-
+from collections import UserDict
 
 class Saver:
-
     def __init__(self):
         self.__file_name = Paths.database_file
 
+    def save(self, records):
+        with open(self.__file_name, "wb") as f:
+            pickle.dump(records, f)
 
-    def save(records):
-        pass
-        #save records to file
+    def load(self) -> list:
+        try:
+            with open(self.__file_name, "rb") as f:
+                return pickle.load(f)
+        except: 
+            return {}
+        
 
-    def load(records):
+class Repository(UserDict):
+    def __init__(self, saver: Saver):
+        self.__saver = saver
+        self.data = self.__saver.load()
+
+    def get_all(self):
+        return list(self.data.values())
+
+    def add_record(self, name, record):
+        self.data[name] = record
+        self.__saver.save(self.data)
         pass
-        #load records from file
+
+    def update_record(self, name, record):
+        self.data[name] = record
+        self.__saver.save(self.data)
+
+
+    def delete_record(self):
+        pass
+
+    def find_by_name(self, name):
+        return self.data.get(name)
+
+

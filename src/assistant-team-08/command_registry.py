@@ -23,19 +23,26 @@ Example:
 """
 from models import Record
 from constants import Messages
+from repository import Repository, Saver
+from validation import Validation
 
-command_registry = {}
+_command_registry = {}
+_saver = Saver()
+_repository = Repository(_saver)
+_validator = Validation()
 
-def create_command_executor(storage):
+
+def create_command_executor():
     """
     Creates and returns a command executor function.
     """
     def run_command(command_str: str, *args):
         """Executes a command based on the command string."""
-        command_func = command_registry.get(command_str.lower())
+        command_func = _command_registry.get(command_str.lower())
         if command_func:
-            return command_func(args, storage)
+            return command_func(args)
     return run_command
+
 
 def register_command(name):
     """
@@ -43,9 +50,10 @@ def register_command(name):
     """
     def decorator(func):
         # Register the function in the command_registry dictionary
-        command_registry[name.lower()] = func
+        _command_registry[name.lower()] = func
         return func
     return decorator
+
 
 def input_error(func):
     """
@@ -63,26 +71,43 @@ def input_error(func):
     return inner
 
 # Define commands using the decorator
+
+
 @register_command('add')
 @input_error
-def add_contact(args, storage):
+def add_contact(args):
     """
     Command to add a contact with the given name and phone number to a storage
     """
     name, phone, *_ = args
-    record = storage.get(name)
+    record = _repository.find_by_name(name)
     message = Messages.ContactUpdated
     if record is None:
         record = Record(name)
-        storage[name] = record
+        _repository.add_record(name, record)
         message = Messages.ContactAdded
     if phone and record.find_phone(phone) is None:
         record.add_phone(phone)
     return message
 
+
+@register_command('update_email')
+def update_email(args):
+    name, email, *_ = args
+    if not _validator.validate_email(email):
+        return Messages.EmailNotValid
+    record = _repository.find_by_name(name)
+    if record:
+        record.email = email
+        _repository.update_record(name, record)
+    return Messages.ContactUpdated
+
+
 @register_command('list')
-def list_contacts(storage):
+def list_contacts(args):
     """
     Command to list all contacts.
     """
-    print("Listing all contacts")
+    contacts_string = "\n".join([str(record) for record in _repository.get_all()])
+    return contacts_string
+
