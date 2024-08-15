@@ -6,7 +6,7 @@ class Messages:
     HowCanIHelpYou = "How can I help you?"
     InvalidCommand = "Invalid command."
     WrongParameters = "Wrong parameters"
-    WrongPhoneNumber = "wrong phone number"
+    WrongPhoneNumber = "wrong phone number. Must be 12 numbers starting with 38"
     WrongBirthdayValue = "Wrong birthday value, should be DD.MM.YYYY"
     WrongNameValue = "Wrong name value. Should contain only letters and hyphens."
     ContactDoesNotHaveBirthdayValue = "Contact does not have birthday value"

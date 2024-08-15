@@ -87,6 +87,10 @@ def add_contact(args):
     Command to add a contact with the given name and phone number to a storage
     """
     name, phone, *_ = args
+    if not _validator.validate_name(name):
+        return Messages.WrongNameValue
+    if not _validator.validate_phone(phone):
+        return Messages.WrongPhoneNumber
     record = _repository.find_by_name(name)
     message = Messages.ContactUpdated
     if record is None:
