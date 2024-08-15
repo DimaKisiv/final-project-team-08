@@ -3,7 +3,6 @@ import pickle
 from constants import Paths, Messages
 from collections import UserDict
 from datetime import datetime, timedelta
-from constants import Messages
 
 class Saver:
     def __init__(self):
