@@ -3,6 +3,7 @@ import pickle
 from constants import Paths, Messages
 from collections import UserDict
 
+
 class Saver:
     def __init__(self):
         self.__file_name = Paths.database_file
@@ -17,6 +18,7 @@ class Saver:
                 return pickle.load(f)
         except:
             return {}
+
 
 class Repository(UserDict):
     def __init__(self, saver: Saver):
@@ -36,9 +38,20 @@ class Repository(UserDict):
         self.__saver.save(self.data)
 
     def delete_record(self, name):
-          del self.data[name]
+        del self.data[name]
 
     def find_by_name(self, name):
         return self.data.get(name)
 
+    def find(self, field_name, value):
+        for record in self.data.values():
+            if field_name == "phone":
+                if record.has_phone(value):
+                    return record
+            else:
+                field = getattr(record, field_name, None)
+                if field and field.value == value:
+                    return record
+
+        return None
 
