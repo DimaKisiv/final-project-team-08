@@ -2,6 +2,7 @@ class Record:
     def __init__(self, name):
         self.name = name
         self.email = ""
+        self.birthday = None
         pass
         #fields for:
         #id, name, address, phone numbers, email, birthday

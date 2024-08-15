@@ -102,6 +102,29 @@ def update_email(args):
         _repository.update_record(name, record)
     return Messages.ContactUpdated
 
+@register_command('add_birthday')
+def add_birthday(args):
+    name, date, *_ = args
+    if not _validator.validate_birthday(date):
+        return Messages.BirthdayNotValid
+    record = _repository.find_by_name(name)
+    if record:
+        record.birthday = date
+        _repository.update_record(name, record)
+    return Messages.ContactUpdated
+
+@register_command('show_birthday')
+def show_birthday(args):
+    name, *_ = args
+    record = _repository.find_by_name(name)
+    if record and record.birthday:
+        return record.birthday
+    return Messages.BirthdayNotSet
+
+@register_command('show_upcoming_birthday')
+def show_upcoming_birthday(args):
+    days, *_ = args or [7]
+    return _repository.get_upcoming_birthday(days)
 
 @register_command('list')
 def list_contacts(args):

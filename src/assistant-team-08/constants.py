@@ -24,6 +24,9 @@ class Messages:
     PhoneNotValid = "Invalid phone number format"
     EmailNotValid = "Invalid email format"
     BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
+    BirthdayNotSet = "Birthday not set."
+    UpcomingBirthdayMiddlePart = "has an upcoming birthday on"
+    NoUpcomingBirthday = "You have no contacts with upcoming birthday"
 
 class Paths:
     database_file = "data.pkl"
