@@ -1,6 +1,6 @@
 # class for saving and updating records in file
 import pickle
-from constants import Paths
+from constants import Paths, Messages
 from collections import UserDict
 from datetime import datetime, timedelta
 from constants import Messages
@@ -17,9 +17,8 @@ class Saver:
         try:
             with open(self.__file_name, "rb") as f:
                 return pickle.load(f)
-        except: 
+        except:
             return {}
-        
 
 class Repository(UserDict):
     def __init__(self, saver: Saver):
@@ -57,9 +56,8 @@ class Repository(UserDict):
 
         return upcoming_birthdays
 
-
-    def delete_record(self):
-        pass
+    def delete_record(self, name):
+          del self.data[name]
 
     def find_by_name(self, name):
         return self.data.get(name)
