@@ -2,6 +2,7 @@
 import pickle
 from constants import Paths, Messages
 from collections import UserDict
+from datetime import datetime, timedelta
 
 
 class Saver:
@@ -36,6 +37,25 @@ class Repository(UserDict):
     def update_record(self, name, record):
         self.data[name] = record
         self.__saver.save(self.data)
+
+    def get_upcoming_birthday(self, days):
+        upcoming_birthdays = ""
+        today = datetime.today().date()
+        next_date = today + timedelta(days=int(days))
+
+        for record in self.data.values():
+            if record.birthday:
+                birthday_in_datetime = datetime.strptime(record.birthday, "%d.%m.%Y").date()
+                birthday_this_year = birthday_in_datetime.replace(year=today.year)
+                if today <= birthday_this_year <= next_date:
+                    if len(upcoming_birthdays) != 0:
+                        upcoming_birthdays = upcoming_birthdays + '\n'
+                    upcoming_birthdays = upcoming_birthdays + f"{record.name} {Messages.UpcomingBirthdayMiddlePart} {birthday_this_year.strftime("%d.%m.%Y")}."
+
+        if len(upcoming_birthdays) == 0:
+            upcoming_birthdays = Messages.NoUpcomingBirthday
+
+        return upcoming_birthdays
 
     def delete_record(self, name):
         del self.data[name]
