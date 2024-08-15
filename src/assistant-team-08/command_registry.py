@@ -41,6 +41,8 @@ def create_command_executor():
         command_func = _command_registry.get(command_str.lower())
         if command_func:
             return command_func(args)
+        else:
+            return Messages.InvalidCommand
     return run_command
 
 
@@ -92,29 +94,73 @@ def add_contact(args):
     if not _validator.validate_phone(phone):
         return Messages.WrongPhoneNumber
     record = _repository.find_by_name(name)
-    message = Messages.ContactUpdated
-    if record is None:
-        record = Record(name)
-        _repository.add_record(name, record)
-        message = Messages.ContactAdded
-    if phone and not record.has_phone(phone):
-        record.add_phone(phone)
-    return message
+    if record is not None:
+        return Messages.ContactAlreadyExists
+    record = Record(name)
+    record.add_phone(phone)
+    _repository.add_record(name, record)
+    return Messages.ContactAdded
 
+@register_command('add_phone')
+@input_error
+def add_phone(args):
+    name, phone, *_ = args
+    if not _validator.validate_phone(phone):
+        return Messages.WrongPhoneNumber
+    record = _repository.find_by_name(name)
+    if record is None:
+        return Messages.ContactDoesNotExist
+    record.add_phone(phone)
+    _repository.update_record(name, record)
+    return Messages.PhoneAdded
+
+@register_command('update_phone')
+@input_error
+def update_phone(args):
+    name, old_phone, new_phone, *_ = args
+    if not _validator.validate_phone(old_phone):
+        return Messages.WrongPhoneNumber
+    if not _validator.validate_phone(new_phone):
+        return Messages.WrongPhoneNumber
+    record = _repository.find_by_name(name)
+    if record is None:
+        return Messages.ContactDoesNotExist
+    if not record.has_phone(old_phone):
+        Messages.GiveNameWithOldAndNewPhones
+    record.remove_phone(old_phone)
+    record.add_phone(new_phone)
+    _repository.update_record(name, record)
+    return Messages.ContactUpdated
 
 @register_command('update_email')
+@input_error
 def update_email(args):
     name, email, *_ = args
     if not _validator.validate_email(email):
         return Messages.EmailNotValid
     record = _repository.find_by_name(name)
-    if record:
-        record.email = email
-        _repository.update_record(name, record)
+    if record is None:
+        return Messages.ContactDoesNotExist
+    record.email = email
+    _repository.update_record(name, record)
     return Messages.ContactUpdated
 
-@register_command('add_birthday')
-def add_birthday(args):
+@register_command('update_address')
+@input_error
+def update_address(args):
+    name, address, *_ = args
+    if not _validator.validate_address(address):
+        return Messages.WrongAddress
+    record = _repository.find_by_name(name)
+    if record is None:
+        return Messages.ContactDoesNotExist
+    record.address = address
+    _repository.update_record(name, record)
+    return Messages.ContactUpdated
+
+@register_command('update_birthday')
+@input_error
+def update_birthday(args):
     name, date, *_ = args
     if not _validator.validate_birthday(date):
         return Messages.BirthdayNotValid
@@ -125,6 +171,7 @@ def add_birthday(args):
     return Messages.ContactUpdated
 
 @register_command('show_birthday')
+@input_error
 def show_birthday(args):
     name, *_ = args
     record = _repository.find_by_name(name)
@@ -162,7 +209,6 @@ def delete_contact(args):
 
     _repository.delete_record(name)
     return Messages.ContactDeleted
-
 
 @register_command('find')
 @input_error

@@ -28,7 +28,10 @@ def main():
     while True:
         user_input = session.prompt(Messages.EnterACommand)
         command, *args = parse_input(user_input)
+        if command == "exit" or command == "close":
+            print(Messages.GoodBye)
 
+            break
         # Execute the command and print the result
         result = command_executor(command, *args)
         print(result)

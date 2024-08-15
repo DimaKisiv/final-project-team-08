@@ -7,6 +7,7 @@ class Messages:
     InvalidCommand = "Invalid command."
     WrongParameters = "Wrong parameters"
     WrongPhoneNumber = "wrong phone number. Must be 12 numbers starting with 38"
+    WrongAddress = "Wrong address. Only allowed letters, numbers, comas and spaces"
     WrongBirthdayValue = "Wrong birthday value, should be DD.MM.YYYY"
     WrongNameValue = "Wrong name value. Should contain only letters and hyphens."
     ContactDoesNotHaveBirthdayValue = "Contact does not have birthday value"

@@ -45,7 +45,7 @@ class Repository(UserDict):
 
         for record in self.data.values():
             if record.birthday:
-                birthday_in_datetime = datetime.strptime(record.birthday, "%d.%m.%Y").date()
+                birthday_in_datetime = datetime.strptime(record.birthday.value, "%d.%m.%Y").date()
                 birthday_this_year = birthday_in_datetime.replace(year=today.year)
                 if today <= birthday_this_year <= next_date:
                     if len(upcoming_birthdays) != 0:
@@ -59,6 +59,7 @@ class Repository(UserDict):
 
     def delete_record(self, name):
         del self.data[name]
+        self.__saver.save(self.data)
 
     def find_by_name(self, name):
         return self.data.get(name)
