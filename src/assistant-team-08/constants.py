@@ -8,6 +8,7 @@ class Messages:
     WrongParameters = "Wrong parameters"
     WrongPhoneNumber = "wrong phone number"
     WrongBirthdayValue = "Wrong birthday value, should be DD.MM.YYYY"
+    WrongNameValue = "Wrong name value. Should contain only letters and hyphens."
     ContactDoesNotHaveBirthdayValue = "Contact does not have birthday value"
     EnterUserName = "Enter user name"
     GiveNameAndPhone = "Give me name and phone please."
@@ -24,6 +25,7 @@ class Messages:
     PhoneNotValid = "Invalid phone number format"
     EmailNotValid = "Invalid email format"
     BirthdayNotValid = "Invalid date format. Use DD.MM.YYYY"
+    ContactListEmpty = "Contact list is empty"
 
 class Paths:
     database_file = "data.pkl"

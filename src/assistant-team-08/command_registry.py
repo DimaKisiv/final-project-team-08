@@ -73,6 +73,8 @@ def input_error(func):
             return "Error: No contact with this name was found in the dictation"
         except IndexError:
             return "Error: Command requires 1 argument (name)"
+        except Exception as e:
+            return f"Unexpected Error: {str(e)}"
     return inner
 
 # Define commands using the decorator
@@ -91,7 +93,7 @@ def add_contact(args):
         record = Record(name)
         _repository.add_record(name, record)
         message = Messages.ContactAdded
-    if phone and record.find_phone(phone) is None:
+    if phone and not record.has_phone(phone):
         record.add_phone(phone)
     return message
 
@@ -112,8 +114,11 @@ def list_contacts(args):
     """
     Command to list all contacts.
     """
-    contacts_string = "\n".join([str(record)
-                                for record in _repository.get_all()])
+    contacts_string = "\n".join([str(record) for record in _repository.get_all()])
+
+    if not contacts_string:
+        return Messages.ContactListEmpty
+
     return contacts_string
 
 @register_command('delete')
@@ -129,3 +134,26 @@ def delete_contact(args):
 
     _repository.delete_record(name)
     return Messages.ContactDeleted
+
+
+@register_command('find')
+@input_error
+def find_contact(args):
+    """
+    The command to find a contact by name, phone, email or birthday
+    """
+    value, *_ = args
+    record = _repository.find_by_name(value)
+    if record is not None:
+        return record
+
+    if _validator.validate_phone(value):
+        record = _repository.find("phone", value)
+
+    if _validator.validate_email(value):
+        record = _repository.find("email", value)
+
+    if _validator.validate_birthday(value):
+        record = _repository.find("birthday", value)
+
+    return str(record) or Messages.ContactDoesNotExist
