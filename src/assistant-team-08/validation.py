@@ -7,6 +7,8 @@ class Validation:
     BirthdayPattern = r"^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$"
     NamePattern = r"^[a-zA-Z-]+$"
     AddressPattern = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d, ]+$"
+    NotesKeyPattern = r"^[A-Za-z0-9_-]+$"
+    NotesTagPattern = r"^[A-Za-z0-9_-]+$"
 
     def validate_phone(self, phone):
         match = re.match(self.PhonePattern, phone)
@@ -34,6 +36,23 @@ class Validation:
 
     def validate_address(self, address):
         match = re.match(self.AddressPattern, address)
+        if match:
+            return True
+        return False
+
+    def validate_key(self, key):
+        match = re.match(self.NotesKeyPattern, key)
+        if match:
+            return True
+        return False
+    
+    def validate_text(self, text):
+        if len(text) > 0:
+            return True
+        return False
+    
+    def validate_tag(self, tag):
+        match = re.match(self.NotesTagPattern, tag)
         if match:
             return True
         return False
