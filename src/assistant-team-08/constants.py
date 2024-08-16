@@ -1,4 +1,7 @@
-#fields with all available commands to keep them all in one place
+# fields with all available commands to keep them all in one place
+import os
+from pathlib import Path
+
 
 class Messages:
     Welcome = "Welcome to the assistant bot!"
@@ -15,13 +18,13 @@ class Messages:
     GiveNameAndPhone = "Give me name and phone please."
     GiveNameWithOldAndNewPhones = "Give me name with old and new phones please."
     ContactAlreadyExists = "Contact already exists"
-    ContactDoesNotExist = "Contact does not exist" 
+    ContactDoesNotExist = "Contact does not exist"
     ContactUpdated = "Contact updated."
     ContactAdded = "Contact added."
     PhoneAdded = "Phone added."
     PhoneAlreadyExists = "Phone already exists."
-    ContactDeleted ="Contact deleted."
-    BirthdayAdded ="Birthday added."
+    ContactDeleted = "Contact deleted."
+    BirthdayAdded = "Birthday added."
     GoodBye = "Good bye!"
     PhoneNotValid = "Invalid phone number format"
     EmailNotValid = "Invalid email format"
@@ -31,6 +34,7 @@ class Messages:
     UpcomingBirthdayMiddlePart = "has an upcoming birthday on"
     NoUpcomingBirthday = "You have no contacts with upcoming birthday"
 
-class Paths:
-    database_file = "data.pkl"
 
+class Paths:
+    # Path to the database file in user's home directory
+    database_file = str(Path.home()) + os.sep + "data.pkl"
