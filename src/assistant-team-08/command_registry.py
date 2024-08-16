@@ -21,14 +21,15 @@ Example:
     command_executor("add", "John", "+38098442123")
     command_executor("list")
 """
-from models import Record
-from constants import Messages
-from repository import Repository, Saver
+from datetime import datetime
+from models import Note, Record
+from constants import Messages, Paths
+from repository import AddressBook, NotesBook, Saver
 from validation import Validation
 
 _command_registry = {}
-_saver = Saver()
-_repository = Repository(_saver)
+_addressbook = AddressBook(Saver(Paths.addressbook_file))
+_notesbook = NotesBook(Saver(Paths.notesbook_file))
 _validator = Validation()
 
 
@@ -70,9 +71,9 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Error: Command requires exactly 2 arguments (name and phone/birthday/address)."
+            return Messages.WrongParameters
         except KeyError:
-            return "Error: No contact with this name was found in the dictation"
+            return Messages.ContactDoesNotExist
         except IndexError:
             return "Error: Command requires 1 argument (name)"
         except Exception as e:
@@ -82,7 +83,7 @@ def input_error(func):
 # Define commands using the decorator
 
 
-@register_command('add')
+@register_command('add_contact')
 @input_error
 def add_contact(args):
     """
@@ -93,13 +94,14 @@ def add_contact(args):
         return Messages.WrongNameValue
     if not _validator.validate_phone(phone):
         return Messages.WrongPhoneNumber
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is not None:
         return Messages.ContactAlreadyExists
     record = Record(name)
     record.add_phone(phone)
-    _repository.add_record(name, record)
+    _addressbook.add_record(name, record)
     return Messages.ContactAdded
+
 
 @register_command('add_phone')
 @input_error
@@ -107,12 +109,13 @@ def add_phone(args):
     name, phone, *_ = args
     if not _validator.validate_phone(phone):
         return Messages.WrongPhoneNumber
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is None:
         return Messages.ContactDoesNotExist
     record.add_phone(phone)
-    _repository.update_record(name, record)
+    _addressbook.update_record(name, record)
     return Messages.PhoneAdded
+
 
 @register_command('update_phone')
 @input_error
@@ -122,15 +125,16 @@ def update_phone(args):
         return Messages.WrongPhoneNumber
     if not _validator.validate_phone(new_phone):
         return Messages.WrongPhoneNumber
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is None:
         return Messages.ContactDoesNotExist
     if not record.has_phone(old_phone):
         Messages.GiveNameWithOldAndNewPhones
     record.remove_phone(old_phone)
     record.add_phone(new_phone)
-    _repository.update_record(name, record)
+    _addressbook.update_record(name, record)
     return Messages.ContactUpdated
+
 
 @register_command('update_email')
 @input_error
@@ -138,12 +142,13 @@ def update_email(args):
     name, email, *_ = args
     if not _validator.validate_email(email):
         return Messages.EmailNotValid
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is None:
         return Messages.ContactDoesNotExist
     record.email = email
-    _repository.update_record(name, record)
+    _addressbook.update_record(name, record)
     return Messages.ContactUpdated
+
 
 @register_command('update_address')
 @input_error
@@ -151,12 +156,13 @@ def update_address(args):
     name, address, *_ = args
     if not _validator.validate_address(address):
         return Messages.WrongAddress
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is None:
         return Messages.ContactDoesNotExist
     record.address = address
-    _repository.update_record(name, record)
+    _addressbook.update_record(name, record)
     return Messages.ContactUpdated
+
 
 @register_command('update_birthday')
 @input_error
@@ -164,37 +170,42 @@ def update_birthday(args):
     name, date, *_ = args
     if not _validator.validate_birthday(date):
         return Messages.BirthdayNotValid
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record:
         record.birthday = date
-        _repository.update_record(name, record)
+        _addressbook.update_record(name, record)
     return Messages.ContactUpdated
+
 
 @register_command('show_birthday')
 @input_error
 def show_birthday(args):
     name, *_ = args
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record and record.birthday:
         return record.birthday
     return Messages.BirthdayNotSet
 
+
 @register_command('show_upcoming_birthday')
 def show_upcoming_birthday(args):
     days, *_ = args or [7]
-    return _repository.get_upcoming_birthday(days)
+    return _addressbook.get_upcoming_birthday(days)
 
-@register_command('list')
+
+@register_command('list_addressbook')
 def list_contacts(args):
     """
     Command to list all contacts.
     """
-    contacts_string = "\n".join([str(record) for record in _repository.get_all()])
+    contacts_string = "\n".join([str(record)
+                                for record in _addressbook.get_all()])
 
     if not contacts_string:
         return Messages.ContactListEmpty
 
     return contacts_string
+
 
 @register_command('delete')
 @input_error
@@ -203,31 +214,148 @@ def delete_contact(args):
     The command to delete a contact by name
     """
     name, *_ = args
-    record = _repository.find_by_name(name)
+    record = _addressbook.find_by_name(name)
     if record is None:
         return Messages.ContactDoesNotExist
 
-    _repository.delete_record(name)
+    _addressbook.delete_record(name)
     return Messages.ContactDeleted
 
-@register_command('find')
+
+@register_command('find_contact')
 @input_error
 def find_contact(args):
     """
     The command to find a contact by name, phone, email or birthday
     """
     value, *_ = args
-    record = _repository.find_by_name(value)
+    record = _addressbook.find_by_name(value)
     if record is not None:
         return record
 
     if _validator.validate_phone(value):
-        record = _repository.find("phone", value)
+        record = _addressbook.find("phone", value)
 
     if _validator.validate_email(value):
-        record = _repository.find("email", value)
+        record = _addressbook.find("email", value)
 
     if _validator.validate_birthday(value):
-        record = _repository.find("birthday", value)
+        record = _addressbook.find("birthday", value)
 
     return str(record) or Messages.ContactDoesNotExist
+
+
+@register_command("add_note")
+@input_error
+def add_note(args):
+    key, *text_args = args
+    text = ' '.join(text_args)
+    if not _validator.validate_key(key):
+        return Messages.WrongKey
+    if not _validator.validate_text(text):
+        return Messages.WrongText
+    note = _notesbook.find_by_key(key)
+    if note is not None:
+        return Messages.NoteWithThisKeyAlreadyExists
+    note = Note(key, text, datetime.now())
+    _notesbook.add(key, note)
+    return Messages.NoteAdded
+
+
+@register_command("list_notesbook")
+@input_error
+def list_notesbook(args):
+    notes_string = "\n".join([str(note)
+                              for note in _notesbook.get_all()])
+
+    if not notes_string:
+        return Messages.NotesListEmpty
+
+    return notes_string
+
+
+@register_command("delete_note")
+@input_error
+def delete_note(args):
+    key, *_ = args
+    note = _notesbook.find_by_key(key)
+    if note is None:
+        return Messages.NoteWithThisKeyNotExists
+    _notesbook.delete_note(key)
+    return Messages.NoteDeleted
+
+
+@register_command("update_note")
+@input_error
+def update_note(args):
+    key, *text_args = args
+    text = ' '.join(text_args)
+    if not _validator.validate_key(key):
+        return Messages.WrongKey
+    if not _validator.validate_text(text):
+        return Messages.WrongText
+    note = _notesbook.find_by_key(key)
+    if note is None:
+        return Messages.NoteWithThisKeyNotExists
+    note.text = text
+    _notesbook.update_note(key, note)
+    return Messages.NoteUpdated
+
+
+@register_command("add_tag")
+@input_error
+def add_tag(args):
+    key, tag, *_ = args
+    if not _validator.validate_tag(tag):
+        return Messages.WrongTag
+    note = _notesbook.find_by_key(key)
+    if note is None:
+        return Messages.NoteWithThisKeyNotExists
+    if note.has_tag(tag):
+        return Messages.TagAlreadyExists
+    note.add_tag(tag)
+    _notesbook.update_note(key, note)
+    return Messages.TagAdded
+
+
+@register_command("delete_tag")
+@input_error
+def delete_tag(args):
+    key, tag, *_ = args
+    note = _notesbook.find_by_key(key)
+    if note is None:
+        return Messages.NoteWithThisKeyNotExists
+    if not note.has_tag(tag):
+        return Messages.TagDoesNotExist
+    note.remove_tag(tag)
+    _notesbook.update_note(key, note)
+    return Messages.TagAdded
+
+
+@register_command("find_note_by_tag")
+@input_error
+def find_note_by_tag(args):
+    tag, *_ = args
+    if not _validator.validate_tag(tag):
+        return Messages.WrongTag
+    notes_by_tag = [str(n) for n in _notesbook.get_all() if n.has_tag(tag)]
+    notes_by_tag_str = '\n'.join(notes_by_tag)
+    if not notes_by_tag_str:
+        return Messages.NotesListEmpty
+
+    return notes_by_tag_str
+
+
+@register_command("find_in_notes_text")
+@input_error
+def find_in_notes_text(args):
+    text, *_ = args
+    if not _validator.validate_text(text):
+        return Messages.WrongText
+    notes_by_text = [str(n) for n in _notesbook.get_all() if (
+        text.lower() in n.text.lower())]
+    notes_by_text_str = '\n'.join(notes_by_text)
+    if not notes_by_text_str:
+        return Messages.NotesListEmpty
+
+    return notes_by_text_str
