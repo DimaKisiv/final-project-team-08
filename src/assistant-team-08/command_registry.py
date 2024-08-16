@@ -72,12 +72,6 @@ def input_error(func):
             return func(*args, **kwargs)
         except ValueError:
             return Messages.WrongParameters
-        except KeyError:
-            return Messages.ContactDoesNotExist
-        except IndexError:
-            return "Error: Command requires 1 argument (name)"
-        except Exception as e:
-            return f"Unexpected Error: {str(e)}"
     return inner
 
 # Define commands using the decorator
@@ -344,7 +338,7 @@ def delete_tag(args):
         return Messages.TagDoesNotExist
     note.remove_tag(tag)
     _notesbook.update_note(key, note)
-    return Messages.TagAdded
+    return Messages.TagDeleted
 
 
 @register_command("find_note_by_tag")

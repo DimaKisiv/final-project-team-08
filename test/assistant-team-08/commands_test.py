@@ -1,12 +1,12 @@
 """test suit for commands"""
+from constants import Messages, Paths
+from repository import AddressBook, Saver
+import command_registry as command_service
 from datetime import datetime
 import unittest
 from unittest.mock import MagicMock
 import sys
 sys.path.append("src/assistant-team-08")
-import command_registry as command_service
-from repository import AddressBook, Saver
-from constants import Messages, Paths
 
 
 class TestCommand(unittest.TestCase):
