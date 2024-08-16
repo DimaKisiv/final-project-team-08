@@ -107,11 +107,11 @@ def add_contact(args):
     if email and _validator.validate_email(email):
         record.email = email
         _addressbook.update_record(name, record)
-    
+
     if address and _validator.validate_address(address):
         record.address = address
         _addressbook.update_record(name, record)
-            
+
     if birthday and _validator.validate_birthday(birthday):
         record.birthday = birthday
         _addressbook.update_record(name, record)
@@ -145,7 +145,7 @@ def update_phone(args):
     if record is None:
         return Messages.ContactDoesNotExist
     if not record.has_phone(old_phone):
-        Messages.GiveNameWithOldAndNewPhones
+        return Messages.GiveNameWithOldAndNewPhones
     record.remove_phone(old_phone)
     record.add_phone(new_phone)
     _addressbook.update_record(name, record)
@@ -258,8 +258,7 @@ def find_contact(args):
     if _validator.validate_birthday(value):
         record = _addressbook.find("birthday", value)
 
-    return str(record) or Messages.ContactDoesNotExist
-
+    return str(record) if record is not None else Messages.ContactDoesNotExist
 
 @register_command("add_note")
 @input_error
