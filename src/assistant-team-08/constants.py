@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-# fields with all available commands to keep them all in one place
-import os
-from pathlib import Path
-
-=======
 #fields with all available commands to keep them all in one place
 import os
 from pathlib import Path
->>>>>>> feature/notes
 
 class Messages:
     Welcome = "Welcome to the assistant bot!"
