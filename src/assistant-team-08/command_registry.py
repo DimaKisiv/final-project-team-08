@@ -89,6 +89,10 @@ def add_contact(args):
     Command to add a contact with the given name and phone number to a storage
     """
     name, phone, *_ = args
+    email = args[2] if len(args) > 2 else None
+    address = args[3] if len(args) > 3 else None
+    birthday = args[4] if len(args) > 4 else None
+
     if not _validator.validate_name(name):
         return Messages.WrongNameValue
     if not _validator.validate_phone(phone):
@@ -99,6 +103,18 @@ def add_contact(args):
     record = Record(name)
     record.add_phone(phone)
     _repository.add_record(name, record)
+    if email and _validator.validate_email(email):
+        record.email = email
+        _repository.update_record(name, record)
+    
+    if address and _validator.validate_address(address):
+        record.address = address
+        _repository.update_record(name, record)
+            
+    if birthday and _validator.validate_birthday(birthday):
+        record.birthday = birthday
+        _repository.update_record(name, record)
+
     return Messages.ContactAdded
 
 @register_command('add_phone')
