@@ -1,9 +1,10 @@
-# class for saving and updating records in file
-import pickle
-from constants import Paths, Messages
+"""class for saving and updating records in file"""
+
 from collections import UserDict
+import pickle
 from datetime import datetime, timedelta
 from models import Note
+from constants import Messages
 
 
 class Saver:
@@ -18,7 +19,7 @@ class Saver:
         try:
             with open(self.__file_name, "rb") as f:
                 return pickle.load(f)
-        except:
+        except OSError:
             return {}
 
 
@@ -33,7 +34,6 @@ class AddressBook(UserDict):
     def add_record(self, name, record):
         self.data[name] = record
         self.__saver.save(self.data)
-        pass
 
     def update_record(self, name, record):
         self.data[name] = record
@@ -77,7 +77,6 @@ class AddressBook(UserDict):
                 field = getattr(record, field_name, None)
                 if field and field.value == value:
                     return record
-
         return None
 
 
@@ -98,12 +97,10 @@ class NotesBook(UserDict):
     def add(self, key, note: Note):
         self.data[key] = note
         self.__saver.save(self.data)
-    
+
     def update_note(self, key, note: Note):
         self.data[key] = note
         self.__saver.save(self.data)
 
     def delete_note(self, key):
         del self.data[key]
-        
-        

@@ -138,7 +138,6 @@ class Field:
     def __init__(self, name, value):
         self.name = name
         self.value = value
-        pass
 
     def __str__(self):
         return f"{self.name.capitalize()}: {self.value}"
@@ -147,28 +146,23 @@ class Field:
 class NameField(Field):
     def __init__(self, value):
         super().__init__("name", value)
-        pass
 
 
 class PhoneField(Field):
     def __init__(self, value):
         super().__init__("phone", value)
-        pass
 
 
 class AddressField(Field):
     def __init__(self, value):
         super().__init__("address", value)
-        pass
 
 
 class EmailField(Field):
     def __init__(self, value):
         super().__init__("email", value)
-        pass
 
 
 class BirthdayField(Field):
     def __init__(self, value):
         super().__init__("birthday", value)
-        pass
