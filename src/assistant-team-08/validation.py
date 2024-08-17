@@ -45,12 +45,12 @@ class Validation:
         if match:
             return True
         return False
-    
+
     def validate_text(self, text):
         if len(text) > 0:
             return True
         return False
-    
+
     def validate_tag(self, tag):
         match = re.match(self.NotesTagPattern, tag)
         if match:

@@ -1,12 +1,13 @@
 """
-This module provides a simple command execution framework using a registry of commands.
-Commands can be registered with the `register_command` decorator and then executed
-through the `create_command_executor` function.
+This module provides a simple command execution framework using a registry of
+commands. Commands can be registered with the `register_command` decorator and
+then executed through the `create_command_executor` functin.
 
 Usage:
 1. Define commands using the `@register_command('command_name')` decorator.
 2. Create a command executor using `create_command_executor()`.
-3. Call the executor with the command string and arguments to execute the registered command.
+3. Call the executor with the command string and arguments to execute the
+registered command.
 
 Example:
     @register_command('add')
@@ -253,6 +254,7 @@ def find_contact(args):
         record = _addressbook.find("birthday", value)
 
     return str(record) if record is not None else Messages.ContactDoesNotExist
+
 
 @register_command("add_note")
 @input_error
