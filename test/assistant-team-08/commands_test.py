@@ -27,8 +27,8 @@ class TestCommand(unittest.TestCase):
 
     def test_add_command_with_no_enough_args(self):
         result = self.command_executor("add_contact")
-        self.assertEqual(
-            result, Messages.WrongParameters)
+        self.assertIn(
+            Messages.AddCommandUsage, result)
 
     def test_add_commands_with_all_args(self):
         result = self.command_executor("add_contact", "John", "+380981171922", "john@example.com", "23 Main St",

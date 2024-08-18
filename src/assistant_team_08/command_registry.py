@@ -64,22 +64,24 @@ def register_command(name):
     return decorator
 
 
-def input_error(func):
-    """
-    Decorator for handling input error
-    """
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return Messages.WrongParameters
-    return inner
+def usage(usage):
+    def input_error(func):
+        """
+        Decorator for handling input error
+        """
+        def inner(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except ValueError:
+                return f"{Messages.WrongParameters}... {usage}"
+        return inner
+    return input_error
 
 # Define commands using the decorator
 
 
 @register_command('add_contact')
-@input_error
+@usage(Messages.AddCommandUsage)
 def add_contact(args):
     """
     Command to add a contact with the given name and phone number to a storage
@@ -115,7 +117,7 @@ def add_contact(args):
 
 
 @register_command('add_phone')
-@input_error
+@usage(Messages.AddPhoneUsage)
 def add_phone(args):
     name, phone, *_ = args
     if not _validator.validate_phone(phone):
@@ -129,7 +131,7 @@ def add_phone(args):
 
 
 @register_command('update_phone')
-@input_error
+@usage(Messages.UpdatePhoneUsage)
 def update_phone(args):
     name, old_phone, new_phone, *_ = args
     if not _validator.validate_phone(old_phone):
@@ -148,7 +150,7 @@ def update_phone(args):
 
 
 @register_command('update_email')
-@input_error
+@usage(Messages.UpdateEmailUsage)
 def update_email(args):
     name, email, *_ = args
     if not _validator.validate_email(email):
@@ -162,7 +164,7 @@ def update_email(args):
 
 
 @register_command('update_address')
-@input_error
+@usage(Messages.UpdateAddressUsage)
 def update_address(args):
     name, address, *_ = args
     if not _validator.validate_address(address):
@@ -176,7 +178,7 @@ def update_address(args):
 
 
 @register_command('update_birthday')
-@input_error
+@usage(Messages.UpdateBirthdayUsage)
 def update_birthday(args):
     name, date, *_ = args
     if not _validator.validate_birthday(date):
@@ -189,7 +191,7 @@ def update_birthday(args):
 
 
 @register_command('show_birthday')
-@input_error
+@usage(Messages.ShowBirthdayUsage)
 def show_birthday(args):
     name, *_ = args
     record = _addressbook.find_by_name(name)
@@ -219,7 +221,7 @@ def list_contacts(args):
 
 
 @register_command('delete')
-@input_error
+@usage(Messages.DeleteUsage)
 def delete_contact(args):
     """
     The command to delete a contact by name
@@ -234,7 +236,7 @@ def delete_contact(args):
 
 
 @register_command('find_contact')
-@input_error
+@usage(Messages.FindUsage)
 def find_contact(args):
     """
     The command to find a contact by name, phone, email or birthday
@@ -257,7 +259,7 @@ def find_contact(args):
 
 
 @register_command("add_note")
-@input_error
+@usage(Messages.AddNoteUsage)
 def add_note(args):
     key, *text_args = args
     text = ' '.join(text_args)
@@ -274,7 +276,6 @@ def add_note(args):
 
 
 @register_command("list_notesbook")
-@input_error
 def list_notesbook(args):
     notes_string = "\n".join([str(note)
                               for note in _notesbook.get_all()])
@@ -286,7 +287,7 @@ def list_notesbook(args):
 
 
 @register_command("delete_note")
-@input_error
+@usage(Messages.DeleteNoteUsage)
 def delete_note(args):
     key, *_ = args
     note = _notesbook.find_by_key(key)
@@ -297,7 +298,7 @@ def delete_note(args):
 
 
 @register_command("update_note")
-@input_error
+@usage(Messages.UpdateNoteUsage)
 def update_note(args):
     key, *text_args = args
     text = ' '.join(text_args)
@@ -314,7 +315,7 @@ def update_note(args):
 
 
 @register_command("add_tag")
-@input_error
+@usage(Messages.AddTagUsage)
 def add_tag(args):
     key, tag, *_ = args
     if not _validator.validate_tag(tag):
@@ -330,7 +331,7 @@ def add_tag(args):
 
 
 @register_command("delete_tag")
-@input_error
+@usage(Messages.DeleteTagUsage)
 def delete_tag(args):
     key, tag, *_ = args
     note = _notesbook.find_by_key(key)
@@ -344,7 +345,7 @@ def delete_tag(args):
 
 
 @register_command("find_note_by_tag")
-@input_error
+@usage(Messages.FindNoteByTagUsage)
 def find_note_by_tag(args):
     tag, *_ = args
     if not _validator.validate_tag(tag):
@@ -358,7 +359,7 @@ def find_note_by_tag(args):
 
 
 @register_command("find_in_notes_text")
-@input_error
+@usage(Messages.FindInNotesTextUsage)
 def find_in_notes_text(args):
     text, *_ = args
     if not _validator.validate_text(text):
