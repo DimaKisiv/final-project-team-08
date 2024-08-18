@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 
+
 class Messages:
     Welcome = "Welcome to the assistant bot!"
     EnterACommand = "Enter a command: "
@@ -46,6 +47,7 @@ class Messages:
     WrongKey = "Wrong key for note. Should be on alphanumeric value"
     WrongText = "You can't add empty note"
     WrongTag = "Wrong tag for note. Should be on alphanumeric value"
+
 
 class Paths:
     addressbook_file = str(Path.home()) + os.sep + "addressbook.pkl"

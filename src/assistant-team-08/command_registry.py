@@ -1,12 +1,13 @@
 """
-This module provides a simple command execution framework using a registry of commands.
-Commands can be registered with the `register_command` decorator and then executed
-through the `create_command_executor` function.
+This module provides a simple command execution framework using a registry of
+commands. Commands can be registered with the `register_command` decorator and
+then executed through the `create_command_executor` functin.
 
 Usage:
 1. Define commands using the `@register_command('command_name')` decorator.
 2. Create a command executor using `create_command_executor()`.
-3. Call the executor with the command string and arguments to execute the registered command.
+3. Call the executor with the command string and arguments to execute the
+registered command.
 
 Example:
     @register_command('add')
@@ -72,12 +73,6 @@ def input_error(func):
             return func(*args, **kwargs)
         except ValueError:
             return Messages.WrongParameters
-        except KeyError:
-            return Messages.ContactDoesNotExist
-        except IndexError:
-            return "Error: Command requires 1 argument (name)"
-        except Exception as e:
-            return f"Unexpected Error: {str(e)}"
     return inner
 
 # Define commands using the decorator
@@ -260,6 +255,7 @@ def find_contact(args):
 
     return str(record) if record is not None else Messages.ContactDoesNotExist
 
+
 @register_command("add_note")
 @input_error
 def add_note(args):
@@ -344,7 +340,7 @@ def delete_tag(args):
         return Messages.TagDoesNotExist
     note.remove_tag(tag)
     _notesbook.update_note(key, note)
-    return Messages.TagAdded
+    return Messages.TagDeleted
 
 
 @register_command("find_note_by_tag")

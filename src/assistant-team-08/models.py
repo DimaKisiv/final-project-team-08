@@ -4,13 +4,13 @@ class Note:
         self._text = text
         self._create_date = create_date
         self._tags = []
-    
+
     def __str__(self):
         str = f"Key: {self._key}  Text: {self._text}  Created: {self._create_date}"
         if len(self._tags) > 0:
             str += f"\nTags: {",".join(self._tags)}"
         return str
-    
+
     @property
     def key(self):
         return self._key
