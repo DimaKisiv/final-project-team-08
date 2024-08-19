@@ -79,6 +79,11 @@ def usage(usage):
 
 # Define commands using the decorator
 
+@register_command('help')
+def empty_command(args):
+    print(Messages.HelpText)
+    print('\n'.join(get_commands()))
+
 
 @register_command('add_contact')
 @usage(Messages.AddCommandUsage)

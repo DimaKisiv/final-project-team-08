@@ -105,6 +105,8 @@ class Messages:
     WrongText = f"{Fore.RED}You can't add empty note{Style.RESET_ALL}"
     WrongTag = f"{Fore.RED}Wrong tag for note. Should be on alphanumeric value{
         Style.RESET_ALL}"
+    HelpText =  f"{Fore.GREEN}{
+        Style.BRIGHT}You can use one of this commands:{Style.RESET_ALL}"
 
 
 class Paths:
