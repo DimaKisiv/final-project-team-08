@@ -36,8 +36,6 @@ def main():
         result = command_executor(command, *args)
         print(result)
 
-        # TODO: Save storage to the file
-
 
 if __name__ == "__main__":
     main()

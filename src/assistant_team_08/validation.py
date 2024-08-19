@@ -1,3 +1,20 @@
+"""
+Validation Module
+
+This module provides the `Validation` class, which includes methods for validating various types of user input,
+such as phone numbers, email addresses, birthdays, names, addresses, note keys, and note tags. The class uses
+regular expressions to match the input against predefined patterns.
+
+Classes:
+    - Validation: A class that provides methods for validating different types of input data.
+
+Example usage:
+    validator = Validation()
+    if validator.validate_phone("+380123456789"):
+        print("Valid phone number")
+    else:
+        print("Invalid phone number")
+"""
 import re
 
 
