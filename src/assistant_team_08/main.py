@@ -27,6 +27,9 @@ def main():
     # Main command loop
     while True:
         user_input = session.prompt(Messages.EnterACommand)
+        if not user_input:
+            print(Messages.NoCommandEntered)
+            continue
         command, *args = parse_input(user_input)
         if command == "exit" or command == "close":
             print(Messages.GoodBye)
